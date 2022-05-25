@@ -1,0 +1,31 @@
+version: '3.2'
+services:
+  db:
+    image: "mdillon/postgis:11-alpine"
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - ./docker-compose/setup.sh:/docker-entrypoint-initdb.d/setup.sh
+  redis:
+    image: "redis:6.2"
+    command: [sh, -c, "rm -f /data/dump.rdb && redis-server --save ''"]
+    ports: ["6379:6379"]
+  localstack:
+    image: "localstack/localstack:0.12.20"
+    container_name: "localstack_service"
+    ports:
+      - "4566:4566"
+      - "8081:8080"
+    environment:
+      - SERVICES=s3,sqs,sns
+      - DEFAULT_REGION=eu-west-1
+      - AWS_DEFAULT_REGION=eu-west-1
+      - HOSTNAME_EXTERNAL=localhost
+      - USE_SSL=false
+      - DATA_DIR=/tmp/localstack/data
+      - DEBUG=1
+    volumes:
+      - ./docker-compose/localstack:/docker-entrypoint-initaws.d
+      - /var/run/docker.sock:/var/run/docker.sock
