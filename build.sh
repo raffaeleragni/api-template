@@ -53,9 +53,6 @@ ensure_aws_cli() {
 }
 
 sonar_push() {
-  if [ "$SONAR_HOST_URL" == "" ]; then
-    return
-  fi
   ./mvnw  org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=raffaeleragni_jx -Dsonar.organization=raffaeleragni -Dsonar.host.url=https://sonarcloud.io
 }
 
