@@ -1,4 +1,6 @@
 spring:
+  application:
+    version: test-version
   datasource:
     url: jdbc:postgresql://localhost/api_test
     username: postgres

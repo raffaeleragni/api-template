@@ -1,12 +1,12 @@
-package template.api;
+package app;
 
+import app.annotations.IntegrationTest;
 import org.junit.jupiter.api.Test;
-import template.api.annotations.IntegrationTest;
 
 @IntegrationTest
 class ApplicationIT {
   @Test
-  void testContextLoads() {
+  void testContextLoads() { //NOSONAR
     // ONLY context loaded
   }
 }
