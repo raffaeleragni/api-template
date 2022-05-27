@@ -1,6 +1,5 @@
 package app.security;
 
-import app.api.SampleController;
 import static app.security.LoginHelper.makeTokenFromRoles;
 import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -13,9 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -39,9 +41,7 @@ class AuthenticationIT {
   @Test
   void verifyJWTFlowBad() {
     LoginHelper.logout();
-    var ex = assertThrows(AuthenticationCredentialsNotFoundException.class, () -> {
-      var result = controller.test();
-    });
+    var ex = assertThrows(AuthenticationCredentialsNotFoundException.class, () -> controller.test());
     assertThat("Not found exception message", ex.getMessage(), containsString("not found"));
   }
 
@@ -56,5 +56,14 @@ class AuthenticationIT {
     var kongAuth = makeTokenFromRoles(Arrays.asList("api.user"));
     assertThat("credentials not implemented", kongAuth.getCredentials(), is(nullValue()));
     assertThat("details not implemented", kongAuth.getDetails(), is(nullValue()));
+  }
+}
+
+@RestController
+class SampleController {
+  @PreAuthorize("hasRole('USER')") //NOSONAR
+  @GetMapping("/test")
+  String test() {
+    return "test";
   }
 }

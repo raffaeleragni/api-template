@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-class KongFilterTest {
+class SecurityConfigTest {
 
   @Test
   void test() throws Exception {

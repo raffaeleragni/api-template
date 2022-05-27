@@ -1,9 +1,8 @@
-package app.test;
+package app.json;
 
-import app.json.JacksonConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TestHelper {
+public class ObjectMapperHelper {
   public static ObjectMapper getObjectMapper() {
     return new JacksonConfig().objectMapper();
   }

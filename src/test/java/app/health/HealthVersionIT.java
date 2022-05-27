@@ -1,6 +1,6 @@
 package app.health;
 
-import app.test.TestHelper;
+import app.json.ObjectMapperHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,7 +32,7 @@ class HealthVersionIT {
     URI uri = new URI("http://localhost:" + randomServerPort + "/health/check");
 
     ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
-    var json = TestHelper.getObjectMapper().readValue(response.getBody(), JsonNode.class);
+    var json = ObjectMapperHelper.getObjectMapper().readValue(response.getBody(), JsonNode.class);
 
     var version = json.get("components").get("version").get("details").get("version").asText();
     assertThat("Version returned is the one defined in test profile", version, is("test-version"));

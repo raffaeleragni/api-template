@@ -26,11 +26,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 @Configuration
-public class JacksonConfig {
+class JacksonConfig {
 
   @Bean
   @Primary
-  public ObjectMapper objectMapper() {
+  ObjectMapper objectMapper() {
     var mapper = JsonMapper.builder()
       .enable(INDENT_OUTPUT)
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
