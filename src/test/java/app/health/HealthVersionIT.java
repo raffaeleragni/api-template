@@ -1,27 +1,21 @@
 package app.health;
 
+import app.test.annotations.IT;
 import app.json.ObjectMapperHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
-@AutoConfigureMetrics
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@ActiveProfiles("test")
+@IT
 class HealthVersionIT {
 
   @LocalServerPort int randomServerPort;

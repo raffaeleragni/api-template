@@ -1,9 +1,9 @@
 package app;
 
-import app.annotations.IntegrationTest;
 import org.junit.jupiter.api.Test;
+import app.test.annotations.IT;
 
-@IntegrationTest
+@IT
 class ApplicationIT {
   @Test
   void testContextLoads() { //NOSONAR

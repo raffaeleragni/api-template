@@ -1,5 +1,6 @@
 package app.security;
 
+import app.test.annotations.IT;
 import static app.security.LoginHelper.makeTokenFromRoles;
 import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -9,19 +10,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.hamcrest.collection.IsEmptyCollection;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@ActiveProfiles("test")
+@IT
 class AuthenticationIT {
 
   @Autowired SampleController controller;
