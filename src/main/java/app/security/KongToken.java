@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.security.core.Authentication;
 
 @Data
-public class KongToken implements Authentication {
+class KongToken implements Authentication {
 
   private static final long serialVersionUID = 1L;
 

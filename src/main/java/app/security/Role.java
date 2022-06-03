@@ -5,7 +5,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import org.springframework.security.core.GrantedAuthority;
 
-public enum Role implements GrantedAuthority { //NOSONAR
+enum Role implements GrantedAuthority { //NOSONAR
 
   USER;
 
