@@ -1,7 +1,6 @@
 package app.security;
 
 import app.test.annotations.IT;
-import static app.security.LoginHelper.makeTokenFromRoles;
 import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static app.security.KeyMaker.kongTokenWithRoles;
 
 @IT
 class AuthenticationIT {
@@ -23,32 +23,32 @@ class AuthenticationIT {
 
   @Test
   void verifyNoRoleLogin() {
-    var auth = LoginHelper.makeTokenFromRoles(Arrays.asList("api.norole"));
+    var auth = KeyMaker.kongTokenWithRoles(Arrays.asList("api.norole"));
     assertThat("No role taken", auth.getAuthorities(), IsEmptyCollection.empty());
 
-    auth = LoginHelper.makeTokenFromRoles(Arrays.asList("api"));
+    auth = KeyMaker.kongTokenWithRoles(Arrays.asList("api"));
     assertThat("No role taken", auth.getAuthorities(), IsEmptyCollection.empty());
 
-    auth = LoginHelper.makeTokenFromRoles(Arrays.asList("arole"));
+    auth = KeyMaker.kongTokenWithRoles(Arrays.asList("arole"));
     assertThat("No role taken", auth.getAuthorities(), IsEmptyCollection.empty());
   }
 
   @Test
   void verifyJWTFlowBad() {
-    LoginHelper.logout();
+    KeyMaker.logout();
     var ex = assertThrows(AuthenticationCredentialsNotFoundException.class, () -> controller.test());
     assertThat("Not found exception message", ex.getMessage(), containsString("not found"));
   }
 
   @Test
   void verifyJWTFlowGood() {
-    LoginHelper.loginWithRoles(Arrays.asList("api.user"));
+    KeyMaker.loginWithRoles(Arrays.asList("api.user"));
     assertThat("Test returned test", controller.test(), is("test"));
   }
 
   @Test
   void verifyKongLayer() {
-    var kongAuth = makeTokenFromRoles(Arrays.asList("api.user"));
+    var kongAuth = kongTokenWithRoles(Arrays.asList("api.user"));
     assertThat("credentials not implemented", kongAuth.getCredentials(), is(nullValue()));
     assertThat("details not implemented", kongAuth.getDetails(), is(nullValue()));
   }

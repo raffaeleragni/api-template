@@ -1,5 +1,6 @@
 package app.json;
 
+import static app.json.ObjectMapperForTesting.getObjectMapperForTesting;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import static org.hamcrest.CoreMatchers.is;
@@ -10,7 +11,7 @@ class JacksonTest {
 
   @Test
   void testJacksonDates() throws IOException {
-    var mapper = ObjectMapperHelper.getObjectMapper();
+    var mapper = getObjectMapperForTesting();
 
     var date = "\"2017-05-23T12:10:19Z\"";
 

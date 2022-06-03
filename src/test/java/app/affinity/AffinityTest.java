@@ -1,17 +1,16 @@
 package app.affinity;
 
-import static app.affinity.Affinity.Values.API;
-import static app.affinity.Affinity.Values.QUEUE;
+import app.affinity.Affinity.Values;
 import java.util.HashMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
@@ -24,58 +23,43 @@ class AffinityTest {
   @Mock Environment environment;
   @Mock AnnotatedTypeMetadata metadata;
 
-  void testNoAffinity() {
-    when(metadata.getAnnotationAttributes(Affinity.class.getName()))
-      .thenReturn(null);
-    var result = selector.matches(context, metadata);
+  @ParameterizedTest
+  @CsvSource(nullValues = {"null"}, value = {
+    "null,null,true",
+    "NONE,null,false",
+    "QUEUE,queue,true",
+    "API,api,true",
+    "API,queue,false",
+    "QUEUE,api,false"
+  })
+  void testNoAffinity(
+    Affinity.Values affinity,
+    String acceptedProfile,
+    boolean enabled) {
 
-    assertThat(result, is(true));
+    setupAffinity(affinity);
+    setupProfile(acceptedProfile);
+    var result = selector.matches(context, metadata);
+    assertThat(result, is(enabled));
   }
 
-  @Test
-  void testQueueAffinity() {
-    var map = new HashMap<String, Object>();
-    map.put("value", QUEUE);
-
+  private void setupAffinity(Values affinity) {
+    var map = affinity == null ? null : affinityMapFor(affinity);
     when(metadata.getAnnotationAttributes(Affinity.class.getName()))
-      .thenReturn(map);
-    when(context.getEnvironment()).thenReturn(environment);
-    when(environment.acceptsProfiles(Profiles.of("queue")))
-      .thenReturn(true);
-
-    var result = selector.matches(context, metadata);
-
-    assertThat(result, is(true));
+            .thenReturn(map);
   }
 
-  @Test
-  void testApiAffinity() {
+  private HashMap<String, Object> affinityMapFor(Values affinity) {
     var map = new HashMap<String, Object>();
-    map.put("value", API);
-
-    when(metadata.getAnnotationAttributes(Affinity.class.getName()))
-      .thenReturn(map);
-    when(context.getEnvironment()).thenReturn(environment);
-    when(environment.acceptsProfiles(Profiles.of("api")))
-      .thenReturn(true);
-
-    var result = selector.matches(context, metadata);
-
-    assertThat(result, is(true));
+    map.put("value", affinity);
+    return map;
   }
 
-  @Test
-  void testNoneAffinity() {
-    var map = new HashMap<String, Object>();
-    map.put("value", NONE);
-
-    when(metadata.getAnnotationAttributes(Affinity.class.getName()))
-      .thenReturn(map);
+  private void setupProfile(String profile) {
+    if (profile == null)
+      return;
     when(context.getEnvironment()).thenReturn(environment);
-    when(environment.acceptsProfiles(Profiles.of("none"))).thenReturn(false);
-
-    var result = selector.matches(context, metadata);
-
-    assertThat(result, is(false));
+    when(environment.acceptsProfiles(Profiles.of(profile)))
+            .thenReturn(true);
   }
 }
