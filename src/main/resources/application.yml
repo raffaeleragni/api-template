@@ -87,9 +87,8 @@ management:
     prometheus:
       enabled: true
 
-logging.level:
-  org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: WARN # Hides HHH000424: Disabling contextual LOB creation as createClob() method threw error at application startup.
-  org.springframework.web.filter.CommonsRequestLoggingFilter: ${REQUEST_LOGGING_ENABLED:OFF} # Use DEBUG to enable Spring's RequestLoggingFilterConfiguration logs.
-  org.springframework.web.reactive: OFF # WebClient requests logging - TRACE to enable
-  net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener: DEBUG # DataSource query logging - DEBUG to enable
-  net.ttddyy.dsproxy.listener.logging.SLF4JSlowQueryListener: OFF # DataSource slow query logging - WARN to enable
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: ERROR

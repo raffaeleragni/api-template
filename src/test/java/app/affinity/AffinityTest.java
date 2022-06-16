@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.ConditionContext;
@@ -58,8 +59,7 @@ class AffinityTest {
   private void setupProfile(String profile) {
     if (profile == null)
       return;
-    when(context.getEnvironment()).thenReturn(environment);
-    when(environment.acceptsProfiles(Profiles.of(profile)))
-            .thenReturn(true);
+    lenient().when(context.getEnvironment()).thenReturn(environment);
+    lenient().when(environment.acceptsProfiles(Profiles.of(profile))).thenReturn(true);
   }
 }

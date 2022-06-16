@@ -1,6 +1,7 @@
 package app.json;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -16,6 +17,7 @@ import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -34,14 +36,23 @@ class JacksonConfig {
     var mapper = JsonMapper.builder()
       .enable(INDENT_OUTPUT)
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-      .propertyNamingStrategy(SNAKE_CASE)
       .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
-      .serializationInclusion(NON_NULL)
       .configure(READ_UNKNOWN_ENUM_VALUES_AS_NULL, true)
       .configure(ACCEPT_CASE_INSENSITIVE_ENUMS, true)
+      .propertyNamingStrategy(SNAKE_CASE)
+      .serializationInclusion(NON_EMPTY)
       .build();
 
     mapper.registerModule(new JavaTimeModule());
+    mapper.registerModule(new Jdk8Module());
+    mapper.setVisibility(
+      mapper.getSerializationConfig()
+        .getDefaultVisibilityChecker()
+        .withFieldVisibility(ANY)
+        .withGetterVisibility(ANY)
+        .withSetterVisibility(ANY)
+        .withCreatorVisibility(ANY)
+    );
 
     var module = new SimpleModule();
     DateTimeFormatter formatterWrite = ISO_OFFSET_DATE_TIME;
