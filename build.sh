@@ -53,7 +53,7 @@ ensure_aws_cli() {
 }
 
 sonar_push() {
-  ./mvnw  org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=raffaeleragni_api-template -Dsonar.organization=raffaeleragni -Dsonar.host.url=https://sonarcloud.io
+  ./mvnw  org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.organization=raffaeleragni -Dsonar.host.url=https://sonarcloud.io
 }
 
 docker_push() {

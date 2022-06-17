@@ -1,7 +1,7 @@
 package app.json;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -40,7 +40,7 @@ class JacksonConfig {
       .configure(READ_UNKNOWN_ENUM_VALUES_AS_NULL, true)
       .configure(ACCEPT_CASE_INSENSITIVE_ENUMS, true)
       .propertyNamingStrategy(SNAKE_CASE)
-      .serializationInclusion(NON_EMPTY)
+      .serializationInclusion(NON_ABSENT)
       .build();
 
     mapper.registerModule(new JavaTimeModule());
