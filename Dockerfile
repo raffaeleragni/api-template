@@ -1,11 +1,9 @@
-FROM eclipse-temurin:18-focal
+FROM eclipse-temurin:18-alpine
 ARG APP_VERSION
 
 RUN mkdir /app
 WORKDIR /app
 ADD docker-entrypoint.sh /app
-
-RUN curl -Lo /app/dd-java-agent.jar https://dtdg.co/latest-java-tracer
 
 ADD target/*.jar /app/app.jar
 
